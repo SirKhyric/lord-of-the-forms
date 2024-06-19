@@ -1,9 +1,9 @@
 import { Component } from "react";
-import { ErrorMessage } from "../ErrorMessage";
 import { capitalize } from "../utils/transformations";
 import { allCities } from "../utils/all-cities";
 import { isEmailValid, isPhoneValid } from "../utils/validations";
 import { ClassPhoneInput } from "./ClassPhoneInput";
+import ClassTextInput from "./ClassTextInput";
 
 const firstNameErrorMessage = "First name must be at least 2 characters long";
 const lastNameErrorMessage = "Last name must be at least 2 characters long";
@@ -13,37 +13,14 @@ const phoneNumberErrorMessage = "Invalid Phone Number";
 
 export class ClassForm extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      firstNameInput: "",
-      lastNameInput: "",
-      emailInput: "",
-      phoneInput: ["", "", "", ""],
-      cityNameInput: "",
-      isSubmitted: false,
-    };
+  state = {
+    firstNameInput: "",
+    lastNameInput: "",
+    emailInput: "",
+    phoneInput: ["", "", "", ""],
+    cityNameInput: "",
+    isSubmitted: false,
   }
-
-  handleFirstNameChange = (e) => {
-    this.setState({ firstNameInput: capitalize(e.target.value) })
-  }
-
-  handleLastNameChange = (e) => {
-    this.setState({ lastNameInput: capitalize(e.target.value) })
-  }
-
-  handleEmailChange = (e) => {
-    this.setState({ emailInput: e.target.value })
-  }
-
-  handleCityNameChange = (e) => {
-    this.setState({ cityNameInput: e.target.value })
-  }
-
-  handlePhoneInputChange = (phoneInputState) => {
-    this.setState({ phoneInput: phoneInputState })
-  };
 
   isValidCity = (city) => {
     return allCities.some((validCity) => validCity.toLowerCase() === city.toLowerCase())
@@ -56,19 +33,33 @@ export class ClassForm extends Component {
       emailInput: "",
       phoneInput: ["", "", "", ""],
       cityNameInput: "",
-      isSubmitted: false,
+      isSubmitted: true,
     });
   };
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.setState({ isSubmitted: true });
-    const { firstNameInput, lastNameInput, emailInput, cityNameInput, phoneInput } = this.state;
+
+    const { 
+      firstNameInput, 
+      lastNameInput, 
+      emailInput, 
+      cityNameInput, 
+      phoneInput 
+    } = this.state;
+    
     const isEmailInputValid = isEmailValid(emailInput);
     const isCityInputValid = this.isValidCity(cityNameInput);
     const isPhoneInputValid = isPhoneValid(phoneInput);
 
-    if (firstNameInput.length > 2 && lastNameInput.length > 2 && isEmailInputValid && isCityInputValid && isPhoneInputValid) {
+    if (
+      firstNameInput.length > 2 && 
+      lastNameInput.length > 2 && 
+      isEmailInputValid && 
+      isCityInputValid && 
+      isPhoneInputValid
+    ) {
       this.props.setUserData({
         firstName: firstNameInput,
         lastName: lastNameInput,
@@ -80,12 +71,23 @@ export class ClassForm extends Component {
     }
   };
 
+  updateStateValueFunc = (field) => (value) => {
+    this.setState({ [field]: value });
+  };  
+
   render() {
-    const { firstNameInput, lastNameInput, emailInput, cityNameInput, phoneInput, isSubmitted } = this.state;
+    const { 
+      firstNameInput, 
+      lastNameInput, 
+      emailInput, 
+      cityNameInput, 
+      phoneInput, 
+      isSubmitted 
+    } = this.state;
+
     const isEmailInputValid = isEmailValid(emailInput);
     const isCityInputValid = this.isValidCity(cityNameInput);
     const isPhoneInputValid = isPhoneValid(phoneInput);
-
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -94,68 +96,61 @@ export class ClassForm extends Component {
         </u>
 
         {/* first name input */}
-        <div className="input-wrap">
-          <label>{"First Name"}:</label>
-          <input 
-            placeholder="Bilbo" 
-            type="text"
-            value={firstNameInput}
-            onChange={this.handleFirstNameChange}
-          />
-        </div>
-        {isSubmitted && firstNameInput.length < 2 && (
-          <ErrorMessage message={firstNameErrorMessage} show={true} />
-        )}
+        <ClassTextInput
+          inputProps={{
+            id: 'First Name',
+            placeholder: 'Bilbo',
+            value: capitalize(firstNameInput)
+          }}
+          updateStateValueFunc={this.updateStateValueFunc("firstNameInput")}
+          shouldErrorShow={isSubmitted && firstNameInput.length < 2}
+          errorMessage={firstNameErrorMessage}
+        />
         
         {/* last name input */}
-        <div className="input-wrap">
-          <label>{"Last Name"}:</label>
-          <input 
-            placeholder="Baggins"
-            type="text"
-            value={lastNameInput}
-            onChange={this.handleLastNameChange} 
-          />
-        </div>
-        {isSubmitted && lastNameInput.length < 2 && (
-          <ErrorMessage message={lastNameErrorMessage} show={true} />
-        )}
+        <ClassTextInput
+          inputProps={{
+            id: 'Last Name',
+            placeholder: 'Baggins',
+            value: capitalize(lastNameInput)
+          }} 
+          updateStateValueFunc={this.updateStateValueFunc("lastNameInput")}
+          shouldErrorShow={isSubmitted && lastNameInput.length < 2}
+          errorMessage={lastNameErrorMessage}
+        />
 
         {/* Email Input */}
-        <div className="input-wrap">
-          <label>{"Email"}:</label>
-          <input 
-            placeholder="bilbo-baggins@adventurehobbits.net" 
-            type="text"
-            value={emailInput}
-            onChange={this.handleEmailChange}
-          />
-        </div>
-        {isSubmitted && !isEmailInputValid && (
-          <ErrorMessage message={emailErrorMessage} show={true} />
-        )}
+        <ClassTextInput 
+          inputProps={{
+            id: 'Email',
+            placeholder: 'bilbo-baggins@adventurehobbits.net',
+            value: emailInput
+          }}
+          updateStateValueFunc={this.updateStateValueFunc("emailInput")}
+          shouldErrorShow={isSubmitted && !isEmailInputValid}
+          errorMessage={emailErrorMessage}
+        />
         
         {/* City Input */}
-        <div className="input-wrap">
-          <label>{"City"}:</label>
-          <input 
-            placeholder="Hobbiton"
-            type="text"
-            value={cityNameInput}
-            onChange={this.handleCityNameChange} 
-          />
-        </div>
-        {isSubmitted && !isCityInputValid && (
-          <ErrorMessage message={cityErrorMessage} show={true} />
-        )}
+        <ClassTextInput
+          inputProps={{
+            id: 'City',
+            placeholder: 'Hobbiton',
+            list: 'cities',
+            value: cityNameInput
+          }}
+          updateStateValueFunc={this.updateStateValueFunc("cityNameInput")}
+          shouldErrorShow={isSubmitted && !isCityInputValid}
+          errorMessage={cityErrorMessage}
+        />  
 
+        {/* Phone Input */}
         <ClassPhoneInput
           phoneInputState={phoneInput}
-          setPhoneInputState={this.handlePhoneInputChange}
+          setPhoneInputState={this.updateStateValueFunc("phoneInput")}
+          shouldErrorShow={isSubmitted && !isPhoneInputValid}
+          errorMessage={phoneNumberErrorMessage}
         />
-        {isSubmitted && !isPhoneInputValid && (
-          <ErrorMessage message={phoneNumberErrorMessage} show={true} />
-        )}
         
         <input type="submit" value="Submit" />
       </form>

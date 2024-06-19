@@ -1,7 +1,7 @@
 import { useRef } from "react";
+import { ErrorMessage } from "../ErrorMessage";
 
-
-export const FunctionalPhoneInput = ({ phoneInputState, setPhoneInputState }) => {
+export const FunctionalPhoneInput = ({ phoneInputState, setPhoneInputState, shouldShowError, errorMessage }) => {
 
   const refs = [useRef(), useRef(), useRef(), useRef()];
 
@@ -36,6 +36,7 @@ export const FunctionalPhoneInput = ({ phoneInputState, setPhoneInputState }) =>
   };
 
   return (
+    <>
     <div className="input-wrap">
       <label htmlFor="phone">Phone:</label>
       <div id="phone-input-wrap">
@@ -80,5 +81,7 @@ export const FunctionalPhoneInput = ({ phoneInputState, setPhoneInputState }) =>
         />
       </div>
     </div>
+    <ErrorMessage message={errorMessage} show={shouldShowError} />
+    </>
   );
 }

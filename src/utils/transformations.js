@@ -6,7 +6,11 @@ export const capitalize = (name) => {
 }
 
 export const formatPhoneNumber = (phone) => {
-    if (!phone) return '';
-    const formatted = `${phone.slice(0, 2)}-${phone.slice(2, 4)}-${phone.slice(4, 6)}-${phone.slice(6)}`;
-    return formatted;
+    if (!phone) return;
+    return phone
+        .split('')
+        .reduce((acc, val, index) => {
+            const shouldAddHyphen = index > 0 && index % 2 === 0;
+            return [...acc, shouldAddHyphen ? `-${val}` : val].join('') 
+        })
 }

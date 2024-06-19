@@ -1,50 +1,46 @@
 import { Component, createRef } from "react";
-
+import { ErrorMessage } from "../ErrorMessage";
 
 export class ClassPhoneInput extends Component {
-  constructor(props) {
-    super(props);
-    this.refsArray = [createRef(), createRef(), createRef(), createRef()];
-    this.lengths = [2, 2, 2, 1];
-  }
+  
+  ref0 = createRef();
+  ref1 = createRef();
+  ref2 = createRef();
+  ref3 = createRef();
+  
 
   createOnChangeHandler = (index) => (e) => {
     const { phoneInputState, setPhoneInputState } = this.props;
-    const currentMaxLength = this.lengths[index];
+    const lengths = [2, 2, 2, 1];
+    const currentMaxLength = lengths[index];
     const value = e.target.value.replace(/\D/g, '').slice(0, currentMaxLength);
-    const nextRef = this.refsArray[index + 1];
-    const prevRef = this.refsArray[index - 1];
-
-    const shouldGoToNextRef = currentMaxLength === value.length && nextRef?.current;
-    const shouldGoToPrevRef = value.length === 0 && index > 0;
-
+    
     const newState = phoneInputState.map((phoneInput, phoneInputIndex) => 
       index === phoneInputIndex ? value : phoneInput
     );
 
-    if (shouldGoToNextRef) {
-      nextRef.current?.focus();
-    }
-
-    if (shouldGoToPrevRef) {
-      prevRef.current?.focus();
+    if (currentMaxLength === value.length && this[`ref${index + 1}`]) {
+      this[`ref${index + 1}`].current.focus();
+    } else if (value.length === 0 && index > 0) {
+      this[`ref${index - 1}`].current.focus();
     }
 
     setPhoneInputState(newState);
   };
 
   render() {
-    const { phoneInputState } = this.props;
+    const { phoneInputState, shouldShowError, errorMessage } = this.props;
     return (
-      <div className="input-wrap">
+      <>
+        <div className="input-wrap">
           <label htmlFor="phone">Phone:</label>
           <div id="phone-input-wrap">
             <input 
               type="text" 
               id="phone-input-1" 
               placeholder="55"
-              ref={this.refsArray[0]}
-              maxLength={this.lengths[0]}
+              ref={this.ref0}
+              maxLength={2}
               value={phoneInputState[0]}
               onChange={this.createOnChangeHandler(0)} 
             />
@@ -53,8 +49,8 @@ export class ClassPhoneInput extends Component {
               type="text" 
               id="phone-input-2" 
               placeholder="55" 
-              ref={this.refsArray[1]}
-              maxLength={this.lengths[1]}
+              ref={this.ref1}
+              maxLength={2}
               value={phoneInputState[1]}
               onChange={this.createOnChangeHandler(1)}
             />
@@ -63,8 +59,8 @@ export class ClassPhoneInput extends Component {
               type="text" 
               id="phone-input-3" 
               placeholder="55" 
-              ref={this.refsArray[2]}
-              maxLength={this.lengths[2]}
+              ref={this.ref2}
+              maxLength={2}
               value={phoneInputState[2]}
               onChange={this.createOnChangeHandler(2)}
             />
@@ -73,13 +69,15 @@ export class ClassPhoneInput extends Component {
               type="text" 
               id="phone-input-4" 
               placeholder="5" 
-              ref={this.refsArray[3]}
-              maxLength={this.lengths[3]}
+              ref={this.ref3}
+              maxLength={1}
               value={phoneInputState[3]}
               onChange={this.createOnChangeHandler(3)}
             />
           </div>
         </div>
+        <ErrorMessage message={errorMessage} show={shouldShowError} />
+      </>
     )
   }
 }

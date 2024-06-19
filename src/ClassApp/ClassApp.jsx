@@ -1,27 +1,25 @@
-import { Component } from "react";
-import { ClassForm } from "./ClassForm";
+import { Component, useState } from "react";
 import { ProfileInformation } from "../ProfileInformation";
+import { ClassForm } from "./ClassForm";
 
 
 export class ClassApp extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      userData: null,
-    };
-  }
+  state = {
+    userData: null,
+  };
 
-  setUserData = (data) => {
-    this.setState({ userData: data });
-  }
-
+  setUserData = (userData) => {
+    this.setState({ userData });
+  };
+  
   render() {
+    
     const { userData } = this.state;
     return (
       <>
         <h2>Class</h2>
         <ProfileInformation userData={userData} />
-        <ClassForm setUserData={this.setUserData}/>
+        <ClassForm setUserData={this.setUserData} />
       </>
     );
   }

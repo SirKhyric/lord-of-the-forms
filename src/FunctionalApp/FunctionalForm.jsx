@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { ErrorMessage } from "../ErrorMessage";
 import { capitalize } from "../utils/transformations";
 import { isEmailValid, isPhoneValid } from "../utils/validations";
 import { allCities } from "../utils/all-cities";
 import { FunctionalPhoneInput } from "./FunctionalPhoneInput";
+import FunctionalTextInput from "./FunctionalTextInput";
 
 const firstNameErrorMessage = "First name must be at least 2 characters long";
 const lastNameErrorMessage = "Last name must be at least 2 characters long";
@@ -19,22 +19,6 @@ export const FunctionalForm = ({ setUserData }) => {
   const [cityNameInput, setCityNameInput] = useState("");
   const [emailInput, setEmailInput] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const handleFirstNameChange = (e) => {
-    setFirstNameInput(capitalize(e.target.value));
-  };
-
-  const handleLastNameChange = (e) => {
-      setLastNameInput(capitalize(e.target.value));
-  };
-
-  const handleCityNameChange = (e) => {
-    setCityNameInput(e.target.value);
-  };
-
-  const handleEmailChange = (e) => {
-    setEmailInput(e.target.value);
-  };
 
   const isValidCity = (city) => {
     return allCities.some((validCity) => validCity.toLowerCase() === city.toLowerCase());
@@ -82,68 +66,61 @@ export const FunctionalForm = ({ setUserData }) => {
       </u>
 
       {/* first name input */}
-      <div className="input-wrap">
-        <label>{"First Name"}:</label>
-        <input 
-          placeholder="Bilbo"
-          type="text"
-          value={firstNameInput}
-          onChange={handleFirstNameChange} 
-        />
-      </div>
-      {isSubmitted && firstNameInput.length < 2 && (
-        <ErrorMessage message={firstNameErrorMessage} show={true} />
-      )}
+      <FunctionalTextInput
+        inputProps={{
+          id: 'First Name',
+          placeholder: 'Bilbo',
+          value: capitalize(firstNameInput),
+        }}
+        updateStateValueFunc={setFirstNameInput}
+        shouldErrorShow={isSubmitted && firstNameInput.length < 2}
+        errorMessage={firstNameErrorMessage}
+      />
 
       {/* last name input */}
-      <div className="input-wrap">
-        <label>{"Last Name"}:</label>
-        <input 
-          placeholder="Baggins"
-          type="text"
-          value={lastNameInput}
-          onChange={handleLastNameChange} 
-        />
-      </div>
-      {isSubmitted && lastNameInput.length < 2 && (
-         <ErrorMessage message={lastNameErrorMessage} show={true} />
-      )}
+      <FunctionalTextInput 
+        inputProps={{
+          id: 'Last Name',
+          placeholder: 'Baggins',
+          value: capitalize(lastNameInput),
+        }}
+        updateStateValueFunc={setLastNameInput}
+        shouldErrorShow={isSubmitted && lastNameInput.length < 2}
+        errorMessage={lastNameErrorMessage}
+      />
 
       {/* Email Input */}
-      <div className="input-wrap">
-        <label>{"Email"}:</label>
-        <input placeholder="bilbo-baggins@adventurehobbits.net" 
-          type="text"
-          value={emailInput}
-          onChange={handleEmailChange}
-        />
-      </div>
-      {isSubmitted && !isEmailInputValid && (
-        <ErrorMessage message={emailErrorMessage} show={true} />
-      )}
+      <FunctionalTextInput 
+        inputProps={{
+          id: 'Email',
+          placeholder: 'bilbo-baggins@adventurehobbits.net',
+          value: emailInput
+        }}
+        updateStateValueFunc={setEmailInput}
+        shouldErrorShow={isSubmitted && !isEmailInputValid}
+        errorMessage={emailErrorMessage}
+      />
 
       {/* City Input */}
-      <div className="input-wrap">
-        <label>{"City"}:</label>
-        <input 
-          placeholder="Hobbiton" 
-          type="text"
-          value={cityNameInput}
-          onChange={handleCityNameChange}
-        />
-      </div>
-      {isSubmitted && !isCityInputValid && (
-        <ErrorMessage message={cityErrorMessage} show={true} />
-      )}
+      <FunctionalTextInput 
+        inputProps={{
+          id: 'City',
+          placeholder: 'Hobbiton',
+          list: 'cities',
+          value: cityNameInput
+        }}
+        updateStateValueFunc={setCityNameInput}
+        shouldErrorShow={isSubmitted && !isCityInputValid}
+        errorMessage={cityErrorMessage}
+      />
 
       {/* Phone Input */}
       <FunctionalPhoneInput 
         phoneInputState={phoneInput}
         setPhoneInputState={setPhoneInput}
+        shouldShowError={isSubmitted && !isPhoneInputValid}
+        errorMessage={phoneNumberErrorMessage}
       />
-      {isSubmitted && !isPhoneInputValid && (
-        <ErrorMessage message={phoneNumberErrorMessage} show={true} />
-      )}
 
       <input type="submit" value="Submit" />
     </form>
