@@ -13,12 +13,10 @@ export class ClassApp extends Component {
   };
   
   render() {
-    
-    const { userData } = this.state;
     return (
       <>
         <h2>Class</h2>
-        <ProfileInformation userData={userData} />
+        <ProfileInformation userData={this.state.userData} />
         <ClassForm setUserData={this.setUserData} />
       </>
     );

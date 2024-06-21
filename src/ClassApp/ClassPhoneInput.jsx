@@ -29,7 +29,7 @@ export class ClassPhoneInput extends Component {
   };
 
   render() {
-    const { phoneInputState, shouldShowError, errorMessage } = this.props;
+    const { phoneInputState, shouldErrorShow, errorMessage } = this.props;
     return (
       <>
         <div className="input-wrap">
@@ -76,7 +76,7 @@ export class ClassPhoneInput extends Component {
             />
           </div>
         </div>
-        <ErrorMessage message={errorMessage} show={shouldShowError} />
+        <ErrorMessage message={errorMessage} show={shouldErrorShow} />
       </>
     )
   }

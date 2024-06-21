@@ -1,9 +1,9 @@
 import { Component } from "react";
-import { capitalize } from "../utils/transformations";
-import { allCities } from "../utils/all-cities";
 import { isEmailValid, isPhoneValid } from "../utils/validations";
 import { ClassPhoneInput } from "./ClassPhoneInput";
 import ClassTextInput from "./ClassTextInput";
+import { isValidCity } from "../utils/validations";
+
 
 const firstNameErrorMessage = "First name must be at least 2 characters long";
 const lastNameErrorMessage = "Last name must be at least 2 characters long";
@@ -22,10 +22,6 @@ export class ClassForm extends Component {
     isSubmitted: false,
   }
 
-  isValidCity = (city) => {
-    return allCities.some((validCity) => validCity.toLowerCase() === city.toLowerCase())
-  };
-
   resetForm = () => {
     this.setState({
       firstNameInput: "",
@@ -33,7 +29,7 @@ export class ClassForm extends Component {
       emailInput: "",
       phoneInput: ["", "", "", ""],
       cityNameInput: "",
-      isSubmitted: true,
+      isSubmitted: false,
     });
   };
 
@@ -50,7 +46,7 @@ export class ClassForm extends Component {
     } = this.state;
     
     const isEmailInputValid = isEmailValid(emailInput);
-    const isCityInputValid = this.isValidCity(cityNameInput);
+    const isCityInputValid = isValidCity(cityNameInput);
     const isPhoneInputValid = isPhoneValid(phoneInput);
 
     if (
@@ -86,7 +82,7 @@ export class ClassForm extends Component {
     } = this.state;
 
     const isEmailInputValid = isEmailValid(emailInput);
-    const isCityInputValid = this.isValidCity(cityNameInput);
+    const isCityInputValid = isValidCity(cityNameInput);
     const isPhoneInputValid = isPhoneValid(phoneInput);
 
     return (
@@ -100,7 +96,7 @@ export class ClassForm extends Component {
           inputProps={{
             id: 'First Name',
             placeholder: 'Bilbo',
-            value: capitalize(firstNameInput)
+            value: firstNameInput
           }}
           updateStateValueFunc={this.updateStateValueFunc("firstNameInput")}
           shouldErrorShow={isSubmitted && firstNameInput.length < 2}
@@ -112,7 +108,7 @@ export class ClassForm extends Component {
           inputProps={{
             id: 'Last Name',
             placeholder: 'Baggins',
-            value: capitalize(lastNameInput)
+            value: lastNameInput
           }} 
           updateStateValueFunc={this.updateStateValueFunc("lastNameInput")}
           shouldErrorShow={isSubmitted && lastNameInput.length < 2}

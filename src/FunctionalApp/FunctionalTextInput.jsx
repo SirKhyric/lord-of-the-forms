@@ -14,8 +14,7 @@ const FunctionalTextInput = ({ inputProps, updateStateValueFunc, shouldErrorShow
           {...inputProps}
         />
       </div>
-        <ErrorMessage message={errorMessage} show={shouldErrorShow} />
- 
+      <ErrorMessage message={errorMessage} show={shouldErrorShow} />
     </>
   )
 }

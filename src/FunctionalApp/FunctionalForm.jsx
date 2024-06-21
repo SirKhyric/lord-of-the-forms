@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { capitalize } from "../utils/transformations";
 import { isEmailValid, isPhoneValid } from "../utils/validations";
-import { allCities } from "../utils/all-cities";
 import { FunctionalPhoneInput } from "./FunctionalPhoneInput";
 import FunctionalTextInput from "./FunctionalTextInput";
+import { isValidCity } from "../utils/validations";
 
 const firstNameErrorMessage = "First name must be at least 2 characters long";
 const lastNameErrorMessage = "Last name must be at least 2 characters long";
@@ -20,10 +19,6 @@ export const FunctionalForm = ({ setUserData }) => {
   const [emailInput, setEmailInput] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const isValidCity = (city) => {
-    return allCities.some((validCity) => validCity.toLowerCase() === city.toLowerCase());
-  }
-
   const resetForm = () => {
     setFirstNameInput("");
     setLastNameInput("");
@@ -33,6 +28,8 @@ export const FunctionalForm = ({ setUserData }) => {
     setIsSubmitted(false);
   };
 
+  const isFirstNameValid = firstNameInput.length >= 2;
+  const isLastNameValid = lastNameInput.length >= 2;
   const isCityInputValid = isValidCity(cityNameInput);
   const isPhoneInputValid = isPhoneValid(phoneInput);
   const isEmailInputValid = isEmailValid(emailInput);
@@ -42,8 +39,8 @@ export const FunctionalForm = ({ setUserData }) => {
     setIsSubmitted(true);
 
     if (
-      firstNameInput.length >= 2 && 
-      lastNameInput.length >= 2 &&
+      isFirstNameValid && 
+      isLastNameValid &&
       isEmailInputValid && 
       isCityInputValid && 
       isPhoneInputValid
@@ -70,10 +67,10 @@ export const FunctionalForm = ({ setUserData }) => {
         inputProps={{
           id: 'First Name',
           placeholder: 'Bilbo',
-          value: capitalize(firstNameInput),
+          value: firstNameInput,
         }}
         updateStateValueFunc={setFirstNameInput}
-        shouldErrorShow={isSubmitted && firstNameInput.length < 2}
+        shouldErrorShow={isSubmitted && !isFirstNameValid}
         errorMessage={firstNameErrorMessage}
       />
 
@@ -82,10 +79,10 @@ export const FunctionalForm = ({ setUserData }) => {
         inputProps={{
           id: 'Last Name',
           placeholder: 'Baggins',
-          value: capitalize(lastNameInput),
+          value: lastNameInput,
         }}
         updateStateValueFunc={setLastNameInput}
-        shouldErrorShow={isSubmitted && lastNameInput.length < 2}
+        shouldErrorShow={isSubmitted && !isLastNameValid}
         errorMessage={lastNameErrorMessage}
       />
 

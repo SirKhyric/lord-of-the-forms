@@ -1,7 +1,7 @@
 export const capitalize = (name) => {
     // todo: build this function
     // `capitalize("jOn")` should output `"Jon"`
-    if (!name) return '';
+    if (!name) return;
     return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 }
 

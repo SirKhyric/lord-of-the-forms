@@ -8,7 +8,7 @@ class ClassTextInput extends Component {
   };
 
   render() {
-    const { inputProps, ShouldErrorShow, errorMessage } = this.props;
+    const { inputProps, shouldErrorShow, errorMessage } = this.props;
     const { id } = inputProps;
 
     return (
@@ -21,7 +21,7 @@ class ClassTextInput extends Component {
             {...inputProps}
           />
         </div>
-        <ErrorMessage message={errorMessage} show={ShouldErrorShow} />
+        <ErrorMessage message={errorMessage} show={shouldErrorShow} />
       </>
     )
   }
